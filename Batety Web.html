@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى فلاحتي وبطتي إسراء ❤️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                            900: '#881337',
+                        }
+                    },
+                    fontFamily: {
+                        arabic: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                        aref: ['Aref Ruqaa', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-12px) rotate(2deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Consolidated Custom Styles -->
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(244, 63, 94, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(244, 63, 94, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(244, 63, 94, 0.6);
+        }
+        .polaroid-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .polaroid-card:hover {
+            transform: translateY(-8px) rotate(-1deg) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(244, 63, 94, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .glass-panel {
+            background: rgba(24, 15, 26, 0.85);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-rose-100 transition-colors duration-500 min-h-screen relative overflow-x-hidden dir-rtl">
+
+    <!-- 🎵 ================================================================= -->
+    <!-- 🎵 [مكان تغيير أغنية الخلفية] : يمكنك وضع رابط ملف الصوت MP3 هنا -->
+    <!-- 🎵 ================================================================= -->
+    <audio id="bgAudio" loop preload="auto">
+        <!-- ضع رابط الصوت أو الأغنية هنا داخل src -->
+        <source id="audioSource" src="file:///G:/BATETY/BATETY%20WEB/%D8%A7%D8%BA%D9%86%D9%8A%D8%AA%D9%86%D8%A7.m4a">
+    </audio>
+
+    <!-- Floating Canvas for Heart Animations -->
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
+
+    <!-- ==================== 1. LOCK SCREEN / PASSCODE ENTRY ==================== -->
+    <div id="lockScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-rose-950 via-rose-900 to-slate-950 text-white transition-opacity duration-700 p-4">
+        <div class="max-w-md w-full bg-slate-900/80 backdrop-blur-xl p-8 rounded-3xl border border-rose-500/30 shadow-2xl text-center space-y-6 relative overflow-hidden animate-float">
+            
+            <div class="absolute -top-20 -left-20 w-40 h-40 bg-rose-500/30 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -right-20 w-40 h-40 bg-pink-500/30 rounded-full blur-3xl"></div>
+
+            <div class="relative inline-block">
+                <div class="w-20 h-20 mx-auto bg-gradient-to-tr from-rose-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg shadow-rose-500/40 animate-pulse-slow">
+                    <i data-lucide="heart-handshake" class="w-10 h-10 text-white"></i>
+                </div>
+            </div>
+
+            <div>
+                <h1 class="font-aref text-3xl font-bold text-rose-100 mb-2">عالمنا الفلاحي يا بطتي ❤️</h1>
+                <p class="text-rose-200/80 text-sm font-light">أدخلي كلمة السر السرية الخاصة بنا لفتح موقعنا</p>
+            </div>
+
+            <!-- Lock Form -->
+            <form id="passcodeForm" onsubmit="unlockSite(event)" class="space-y-4">
+                <div class="relative">
+                    <input type="password" id="passcodeInput" placeholder="أدخلي كلمة السر الخاصة بنا..." 
+                           class="w-full px-5 py-3.5 bg-slate-800/80 border border-rose-500/40 rounded-2xl text-center text-white placeholder-rose-300/40 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-inner">
+                    <button type="button" onclick="togglePasscodeVisibility()" class="absolute left-4 top-1/2 -translate-y-1/2 text-rose-300/60 hover:text-rose-200">
+                        <i id="eyeIcon" data-lucide="eye" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div id="unlockError" class="text-rose-400 text-xs hidden animate-bounce flex items-center justify-center gap-1">
+                    <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                    <span>كلمة السر غير صحيحة يا إسراء يا حبيبتي، حاولي مجدداً!</span>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-semibold rounded-2xl shadow-lg shadow-rose-500/30 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                    <span>افتحي قلبي</span>
+                    <i data-lucide="key-round" class="w-4 h-4"></i>
+                </button>
+            </form>
+
+            <div class="pt-2 border-t border-rose-500/20 flex justify-center items-center text-xs text-rose-300/70">
+                <button type="button" onclick="showHint()" class="hover:text-rose-100 underline flex items-center gap-1">
+                    <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> هل تحتاجين تلميحاً؟
+                </button>
+            </div>
+            <p id="hintText" class="text-xs text-rose-200 bg-rose-950/60 p-2.5 rounded-xl border border-rose-500/20 hidden">تلميح: تاريخ أول لحظة حب ما بينا (3826)</p>
+        </div>
+    </div>
+ 
+    <!-- ==================== MAIN SITE CONTAINER ==================== -->
+    <div id="mainContent" class="opacity-0 transition-opacity duration-1000">
+
+        <!-- Navigation Bar -->
+        <nav class="sticky top-0 z-40 glass-panel border-b border-rose-950/50 shadow-sm transition-all duration-300">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <a href="#" class="font-aref text-2xl sm:text-3xl font-bold bg-gradient-to-r from-rose-400 to-pink-400 bg-clip-text text-transparent flex items-center gap-2">
+                    <span>حبنا الأبدي يا بطتي </span>
+                    <i data-lucide="heart" class="w-5 h-5 text-rose-500 fill-rose-500 inline"></i>
+                </a>
+
+                <!-- Nav Links -->
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <a href="#hero" class="hover:text-rose-400 transition-colors">عشقنا</a>
+                    <a href="#letter" class="hover:text-rose-400 transition-colors">رسالتي لكِ</a>
+                    <a href="#counter" class="hover:text-rose-400 transition-colors">عداد أيامنا</a>
+                    <a href="#timeline" class="hover:text-rose-400 transition-colors">شريط ذكرياتنا</a>
+                    <a href="#gallery" class="hover:text-rose-400 transition-colors">معرض الصور</a>
+                    <a href="#love-jar" class="hover:text-rose-400 transition-colors">برطمان الحب</a>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="flex items-center gap-3">
+                    <button id="musicBtn" onclick="toggleAudio()" class="p-2.5 rounded-full bg-rose-900/50 text-rose-300 hover:scale-105 transition-transform relative" title="تشغيل الموسيقى">
+                        <i id="musicIcon" data-lucide="music" class="w-4 h-4"></i>
+                        <span id="musicPulse" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping hidden"></span>
+                    </button>
+
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-rose-300">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Dropdown -->
+            <div id="mobileMenu" class="hidden md:hidden border-t border-rose-900 px-4 py-3 space-y-2 text-center text-sm font-semibold">
+                <a href="#hero" onclick="toggleMobileMenu()" class="block py-1 hover:text-rose-400">عشقنا</a>
+                <a href="#letter" onclick="toggleMobileMenu()" class="block py-1 hover:text-rose-400">رسالتي لكِ</a>
+                <a href="#counter" onclick="toggleMobileMenu()" class="block py-1 hover:text-rose-400">عداد أيامنا</a>
+                <a href="#timeline" onclick="toggleMobileMenu()" class="block py-1 hover:text-rose-400">شريط ذكرياتنا</a>
+                <a href="#gallery" onclick="toggleMobileMenu()" class="block py-1 hover:text-rose-400">معرض الصور</a>
+                <a href="#love-jar" onclick="toggleMobileMenu()" class="block py-1 hover:text-rose-400">برطمان الحب</a>
+            </div>
+        </nav>
+
+        <!-- ==================== 2. HERO SECTION ==================== -->
+        <section id="hero" class="relative py-20 lg:py-28 overflow-hidden flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-4 text-center relative z-20 space-y-6">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-900/40 text-rose-300 text-sm font-medium mb-4 animate-bounce">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span>مُهداة إلى ملاكي وأجمل ما خلق الرحمن: إسراء</span>
+                </div>
+
+                <h1 class="font-aref text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight bg-gradient-to-r from-rose-300 via-pink-300 to-rose-100 bg-clip-text text-transparent leading-tight">
+                    أنا بحبك اوي يا اسراء و مقدرش استغني عنك
+                </h1>
+
+                <p class="text-lg sm:text-xl text-rose-200/80 max-w-2xl mx-auto font-light leading-relaxed">
+                    أنتِ النور الوحيد في وسط ضلمة الدنيا، وأنتِ الحنونة الوحيدة في وسط قسوة العالم.
+                </p>
+
+                <div class="pt-6 flex flex-wrap justify-center gap-4">
+                    <a href="#letter" class="px-8 py-4 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-2xl shadow-lg shadow-rose-500/30 font-semibold transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                        <span>اقرئي الاعتراف الكامل</span>
+                        <i data-lucide="mail-open" class="w-5 h-5"></i>
+                    </a>
+                    <button onclick="spawnHeartBurst()" class="px-8 py-4 glass-panel border-rose-700 hover:bg-rose-900/30 rounded-2xl font-semibold transition-all flex items-center gap-2 text-rose-200">
+                        <span>خليها تمطر قلوب يا إسراء</span>
+                        <i data-lucide="heart" class="w-5 h-5 text-rose-500 fill-rose-500"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 3. LIVE RELATIONSHIP COUNTER ==================== -->
+        <section id="counter" class="py-12 bg-slate-900/60 my-8">
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="text-center mb-8">
+                    <h2 class="font-aref text-3xl font-bold text-rose-200">عدّاد حبنا يا فلاحتي</h2>
+                    <p class="text-sm text-rose-300/70">كل ثانية معكِ هي حياة جديدة لي</p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                    <div class="glass-panel p-6 rounded-2xl text-center shadow-md">
+                        <span id="timerDays" class="font-aref text-3xl sm:text-5xl font-bold text-rose-400 block mb-1">0</span>
+                        <span class="text-xs font-semibold text-rose-200">أيام</span>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl text-center shadow-md">
+                        <span id="timerHours" class="font-aref text-3xl sm:text-5xl font-bold text-rose-400 block mb-1">0</span>
+                        <span class="text-xs font-semibold text-rose-200">ساعات</span>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl text-center shadow-md">
+                        <span id="timerMinutes" class="font-aref text-3xl sm:text-5xl font-bold text-rose-400 block mb-1">0</span>
+                        <span class="text-xs font-semibold text-rose-200">دقائق</span>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl text-center shadow-md">
+                        <span id="timerSeconds" class="font-aref text-3xl sm:text-5xl font-bold text-rose-400 block mb-1">0</span>
+                        <span class="text-xs font-semibold text-rose-200">ثواني</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 4. LOVE LETTER SECTION ==================== -->
+        <section id="letter" class="py-16 max-w-4xl mx-auto px-4">
+            <div class="glass-panel rounded-3xl p-6 sm:p-12 shadow-xl border border-rose-900/60 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-rose-300/20 to-transparent rounded-br-full pointer-events-none"></div>
+                
+                <div class="flex items-center justify-between mb-8 pb-4 border-b border-rose-900/60">
+                    <div class="flex items-center gap-3">
+                        <div class="p-3 bg-rose-500 text-white rounded-2xl shadow-md">
+                            <i data-lucide="feather" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-aref text-2xl sm:text-3xl font-bold text-rose-100">رسالة اعترافي وحبي لكِ يا إسراء</h2>
+                            <p class="text-xs text-rose-500 font-semibold">من أعماق قلبي وبكل صدق</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complete Raw User Text Displayed Beautifully -->
+                <div class="font-amiri text-lg sm:text-xl text-rose-100/90 leading-loose space-y-5 text-justify">
+                    <p class="font-aref text-2xl text-rose-300 font-bold">إلى حبيبة قلبي ورغبتي الوحيدة، إسراء ❤️</p>
+                    
+                    <p>انا بحبك اوي يا اسراء و مقدرش استغني عنك</p>
+                    <p>انا عارف اني وحش و دايما عصبي و متحكم و مقفل و دايما بزعلك و بغضبك</p>
+                    <p>و عارف اني مش عارف ابسطك و لا ابقا حنين عليكي و لا حتي عارف ابقا جمبك صح و لا اسندك ولا ابقا جمبك دايما و اساعدك</p>
+                    <p>بس انا والله العظيم يا اسراء انا بحبك حب متوهبش قبل كدا انا بحبك حب يا اسراء مش هيقل لو هفوة</p>
+                    <p>انا بحبك حب يخليني اندم اني ازعلك او اشوف بس زعلانة</p>
+                    <p class="font-bold text-rose-400">انا بحبك اوي يا اسراء</p>
+                    <p>ورب العرش العظيم و الله العظيم و عزة وجلالة الله انا بحبك يا اسراء و مش هسيبك يا اسراء نهائيا و هفضل اسعي و اصلح من نفسي و اضغط علي نفسي و احرم نفسي من اي حاجة تخليني بس ازعلك او حتي تضايق</p>
+                    <p>انا بحبك يا اسراء و بحب اعمل كل حاجة معاكي انت</p>
+                    <p>انا لما بحضنك او ابوسك او اخدك جوايا انا ببقا بعيط من جوايا ان خايف يجي يوم و اتحرم منك</p>
+                    <p>كأن ابن اتحرم من امه و انسان اتحرم من قلبه و اب اتحرم من مراته انا بجد مقدرش اعيش من غيرك يا اسراء</p>
+                    <p>انا عارف اني زعلتك كتير و انك شايلة مني</p>
+                    <p>بس بالله عليكي يا اسراء انا بحبك و مقدرش بجد اعيش من غيرك انت كل ما املك و كل حاجة انا عاوزها</p>
+                    <p>اسراء انا مش عاوزك بس.. انا محتاجك يا اسراء تكوني مراتي و بنتي و امي و اختي و صحبتي</p>
+                    <p>انا بحبك يا اسراء بحبك بكل تفاصيلك بحب عنيكي بحب شعرك بحب شخصيتك بحب شكلك بحب جسمك و فخادك 👀😉 و بحب ايدك الكيوت بحبك انت يا اسراء بحبك و مقدرش استغني عنك عشان خاطري يا اسراء متسيبينيش عشان خاطري يا اسراء متفقديش الامل فيا</p>
+                    <p>عشان خاطري يا اسراء استحمليني.. بالله عليكي ما تسيبيني يا اسراء</p>
+                    <p class="p-4 bg-rose-900/40 rounded-2xl border-r-4 border-rose-500 font-bold">
+                        انت الحاجة الوحيدة ال منورة في وسط ضلمة الدنيا انت ال وحيدة ال حنينة في وسط قسوة الدنيا<br>
+                        انت الوحيدة ال سند في وسط كسرة الدنيا
+                    </p>
+                    <p>ارجوكي يا اسراء انا بترجاكي يا اسراء متسيبينيش ابوس ايدك متسيبينيش يا اسراء</p>
+                    <p>انا محتاجك اوي يا اسراء.. لما اتعرفت عليكي انا كنت خايف ترفضيني من كتر منا كنت عايزك</p>
+                    <p>انا بس تصرفاتي فعلا وحشة بس عشان خاطري سامحيني ان بجد محتاجك و مقدرش اعيش من غيرك</p>
+                    <p>انا محتاج امان عنيكي و دفء حضنك و حنية شخصيتك و تصرفات عقلك ( مش اوي🥹 )</p>
+                    <p>انا محتاجك في حياتي يا اسراء و لو ان شاء الله دخلت الجنة انت اول شخص هسأل عنه انا عاوزك انت</p>
+                    <p>انت الحور العين ليا يا اسراء انت نور القمر و دفء الشمس و حياة النيل ليا يا اسراء</p>
+                    <p>انت الوردة ال وحيدة المفتحة في وسط عالم كامل مقفل و مضلم</p>
+                    <p>انت الوحيدة ال منورة في وسط مجرة كاملة مفيهاش نور طبيعي</p>
+                    <p class="font-aref text-2xl text-rose-300 text-left pt-4 font-bold">اسراء انا بحبك يا احلي ملاك خلقه ربنا يا اجمل ما خلق الرحمن ❤️</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 5. OUR STORY TIMELINE ==================== -->
+        <section id="timeline" class="py-16 max-w-5xl mx-auto px-4">
+            <div class="text-center mb-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-rose-500">حكايتنا الجميلة</span>
+                <h2 class="font-aref text-3xl sm:text-4xl font-bold text-rose-100 mt-1">شريط ذكرياتنا يا ملاكي</h2>
+                <p class="text-sm text-rose-300/60 mt-2">محطات لا تُنسى وثقها قلبي معكِ</p>
+            </div>
+
+            <!-- Redesigned Grid & Timeline Layout -->
+            <div class="relative border-r-2 md:border-r-0 md:border-l-0 border-rose-800 mr-4 md:mr-0 space-y-12 max-w-4xl mx-auto">
+                
+                <!-- Center Line for Desktop -->
+                <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-rose-800 -translate-x-1/2"></div>
+
+                <!-- Item 1 -->
+                <div class="relative flex flex-col md:flex-row items-center">
+                    <div class="absolute right-[-17px] md:right-auto md:left-1/2 md:-translate-x-1/2 w-8 h-8 rounded-full bg-rose-500 border-4 border-slate-950 shadow flex items-center justify-center z-10">
+                        <i data-lucide="heart" class="w-3.5 h-3.5 text-white fill-white"></i>
+                    </div>
+                    <div class="mr-8 md:mr-0 md:w-1/2 md:pr-10 w-full md:text-left">
+                        <div class="glass-panel p-6 rounded-3xl shadow-lg border border-rose-900/60 hover:scale-[1.01] transition-transform">
+                            <img src="file:///G:/BATETY/BATETY%20WEB/%D8%A7%D9%88%D9%84%20%D9%84%D9%82%D8%A7%D8%A1.jpg" alt="أول لقاء" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-sm">
+                            <span class="text-xs font-bold text-rose-500 uppercase tracking-wider">3 أغسطس - بداية المعجزة</span>
+                            <h3 class="font-aref text-xl font-bold text-rose-100 mt-1">أول حديث ولقاء بيننا</h3>
+                            <p class="text-sm text-rose-200/80 mt-2 leading-relaxed">اليوم الذي دخلتِ فيه حياتي وانقلب فيه كل شيء إلى أجمل وأدفأ صورة، اليوم الذي عرفتُ فيه أنكِ مستقبلي.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="relative flex flex-col md:flex-row-reverse items-center">
+                    <div class="absolute right-[-17px] md:right-auto md:left-1/2 md:-translate-x-1/2 w-8 h-8 rounded-full bg-pink-500 border-4 border-slate-950 shadow flex items-center justify-center z-10">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-white"></i>
+                    </div>
+                    <div class="mr-8 md:mr-0 md:w-1/2 md:pl-10 w-full md:text-right">
+                        <div class="glass-panel p-6 rounded-3xl shadow-lg border border-rose-900/60 hover:scale-[1.01] transition-transform">
+                            <img src="file:///G:/BATETY/BATETY%20WEB/%D8%B3%D8%AD%D8%B1%20%D8%B9%D9%86%D9%8A%D9%83%D9%8A.jpg" alt="نظرة العينين" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-sm">
+                            <span class="text-xs font-bold text-rose-500 uppercase tracking-wider">سحر عيونكِ</span>
+                            <h3 class="font-aref text-xl font-bold text-rose-100 mt-1">احلي عيون في الدنيا كلهااا😍</h3>
+                            <p class="text-sm text-rose-200/80 mt-2 leading-relaxed">أنا محتاج أمان عينيكي ودفء حضنكِ، نظرة واحدة في عينيكِ كانت كافية لتجعل قلبي أسير حنانكِ للأبد.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="relative flex flex-col md:flex-row items-center">
+                    <div class="absolute right-[-17px] md:right-auto md:left-1/2 md:-translate-x-1/2 w-8 h-8 rounded-full bg-rose-600 border-4 border-slate-950 shadow flex items-center justify-center z-10">
+                        <i data-lucide="infinity" class="w-3.5 h-3.5 text-white"></i>
+                    </div>
+                    <div class="mr-8 md:mr-0 md:w-1/2 md:pr-10 w-full md:text-left">
+                        <div class="glass-panel p-6 rounded-3xl shadow-lg border border-rose-900/60 hover:scale-[1.01] transition-transform">
+                            <img src="file:///G:/BATETY/BATETY%20WEB/%D8%B9%D9%87%D8%AF%D9%8A%20%D9%84%D9%8A%D9%83%D9%8A.jpg" alt="وعد الأبدية" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-sm">
+                            <span class="text-xs font-bold text-rose-500 uppercase tracking-wider">وعدٌ لا ينتهي</span>
+                            <h3 class="font-aref text-xl font-bold text-rose-100 mt-1">عهدي لكِ يا بطني</h3>
+                            <p class="text-sm text-rose-200/80 mt-2 leading-relaxed">مش هسيبك نهائياً وهفضل أسعى وأصلح من نفسي وأحرم نفسي من أي حاجة تضايقكِ لأنكِ كل ما أملك.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== 6. PHOTO GALLERY ==================== -->
+        <section id="gallery" class="py-16 max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-rose-500">لحظاتنا سوا سوا </span>
+                <h2 class="font-aref text-3xl font-bold text-rose-100">صورنا سوا سوا  يا حلوياتي </h2>
+                <p class="text-sm text-rose-300/60 mt-1">دوسي على أي صورة لتكبيرها وتشوفي قد ايه انت محلياها</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- صورة 1 -->
+                <div class="polaroid-card bg-slate-900 p-4 rounded-2xl border border-rose-900/60 shadow-lg cursor-pointer" onclick="openLightbox('file:///G:/BATETY/BATETY%20WEB/%D8%A7%D9%86%D8%A7%20%D9%88%20%D8%A8%D8%B7%D8%AA%D9%8A.jpg', 'ابتسامتكِ الساحرة يا إسراء')">
+                    <div class="relative h-64 w-full overflow-hidden rounded-xl bg-slate-800">
+                        <img src="file:///G:/BATETY/BATETY%20WEB/%D8%A7%D9%86%D8%A7%20%D9%88%20%D8%A8%D8%B7%D8%AA%D9%8A.jpg" alt="صورة 1" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-aref text-xl text-center text-rose-200 mt-3">أنا و بطتي 💍❤️</p>
+                </div>
+
+                <!-- صورة 2 -->
+                <div class="polaroid-card bg-slate-900 p-4 rounded-2xl border border-rose-900/60 shadow-lg cursor-pointer" onclick="openLightbox('file:///G:/BATETY/BATETY%20WEB/%D8%B9%D9%86%D9%8A%D9%83%D9%8A%20%D8%A7%D9%84%D8%A7%D9%85%D9%86.jpg', 'عينيكِ الأمان والحنان')">
+                    <div class="relative h-64 w-full overflow-hidden rounded-xl bg-slate-800">
+                        <img src="file:///G:/BATETY/BATETY%20WEB/%D8%B9%D9%86%D9%8A%D9%83%D9%8A%20%D8%A7%D9%84%D8%A7%D9%85%D9%86.jpg" alt="صورة 2" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-aref text-xl text-center text-rose-200 mt-3">عينيكِ الأمان والحنان 👀</p>
+                </div>
+
+                <!-- صورة 3 -->
+                <div class="polaroid-card bg-slate-900 p-4 rounded-2xl border border-rose-900/60 shadow-lg cursor-pointer" onclick="openLightbox('file:///G:/BATETY/BATETY%20WEB/%D8%A7%D9%83%D8%AA%D8%B1%20%D9%88%D8%A7%D8%AD%D8%AF%D8%A9%20%D8%A8%D8%AA%D8%B6%D8%AD%D9%83%D9%86%D9%8A%20.jpg', 'ضحكاتنا وأوقاتنا السعيدة معاً')">
+                    <div class="relative h-64 w-full overflow-hidden rounded-xl bg-slate-800">
+                        <img src="file:///G:/BATETY/BATETY%20WEB/%D8%A7%D9%83%D8%AA%D8%B1%20%D9%88%D8%A7%D8%AD%D8%AF%D8%A9%20%D8%A8%D8%AA%D8%B6%D8%AD%D9%83%D9%86%D9%8A%20.jpg" alt="صورة 3" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-aref text-xl text-center text-rose-200 mt-3">اكتر واحدة بتضحكني 🥰</p>
+                </div>
+
+                <!-- صورة 4 -->
+                <div class="polaroid-card bg-slate-900 p-4 rounded-2xl border border-rose-900/60 shadow-lg cursor-pointer" onclick="openLightbox('file:///G:/BATETY/BATETY%20WEB/%D8%B9%D8%B3%D9%88%D9%84%D8%AA%D9%8A%20.jpg', 'أميرتي الفاتنة وحبيبة قلبي')">
+                    <div class="relative h-64 w-full overflow-hidden rounded-xl bg-slate-800">
+                        <img src="file:///G:/BATETY/BATETY%20WEB/%D8%B9%D8%B3%D9%88%D9%84%D8%AA%D9%8A%20.jpg" alt="صورة 4" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-aref text-xl text-center text-rose-200 mt-3">عسولتي وحبيبة قلبي ✨</p>
+                </div>
+
+                <!-- صورة 5 -->
+                <div class="polaroid-card bg-slate-900 p-4 rounded-2xl border border-rose-900/60 shadow-lg cursor-pointer" onclick="openLightbox('file:///G:/BATETY/BATETY%20WEB/%D8%A7%D9%8A%D8%AF%D9%83%20%D8%A7%D9%84%D9%83%D9%8A%D9%88%D8%AA.jpg', 'يدكِ الكيوت في يدي')">
+                    <div class="relative h-64 w-full overflow-hidden rounded-xl bg-slate-800">
+                        <img src="file:///G:/BATETY/BATETY%20WEB/%D8%A7%D9%8A%D8%AF%D9%83%20%D8%A7%D9%84%D9%83%D9%8A%D9%88%D8%AA.jpg" alt="صورة 5" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-aref text-xl text-center text-rose-200 mt-3">ايدك الكيوت في ايدي 🤝</p>
+                </div>
+
+                <!-- صورة 6 -->
+                <div class="polaroid-card bg-slate-900 p-4 rounded-2xl border border-rose-900/60 shadow-lg cursor-pointer" onclick="openLightbox('file:///G:/BATETY/BATETY%20WEB/%D9%81%D9%84%D8%A7%D8%AD%D8%AA%D9%8A.jpg', 'وردتي الفريدة في هذا العالم')">
+                    <div class="relative h-64 w-full overflow-hidden rounded-xl bg-slate-800">
+                        <img src="file:///G:/BATETY/BATETY%20WEB/%D9%81%D9%84%D8%A7%D8%AD%D8%AA%D9%8A.jpg" alt="صورة 6" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-aref text-xl text-center text-rose-200 mt-3">فلاحتي المزة ال بحبها ❤😁</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center hidden p-4" onclick="closeLightbox()">
+            <div class="max-w-4xl max-h-[90vh] relative p-2" onclick="event.stopPropagation()">
+                <button onclick="closeLightbox()" class="absolute -top-10 left-0 text-white hover:text-rose-400"><i data-lucide="x" class="w-8 h-8"></i></button>
+                <img id="lightboxImg" src="" alt="Enlarged memory" class="max-h-[80vh] w-auto rounded-2xl shadow-2xl mx-auto object-contain">
+                <p id="lightboxCaption" class="text-center text-rose-200 font-aref text-xl mt-4"></p>
+            </div>
+        </div>
+
+        <!-- ==================== 7. REASONS WHY I LOVE YOU JAR ==================== -->
+        <section id="love-jar" class="py-16 max-w-4xl mx-auto px-4">
+            <div class="glass-panel rounded-3xl p-8 sm:p-12 text-center border border-rose-900 shadow-xl relative overflow-hidden">
+                <span class="text-xs font-bold uppercase tracking-widest text-rose-500">برطمان عشق فلاحتي</span>
+                <h2 class="font-aref text-3xl sm:text-4xl font-bold text-rose-100 mt-1 mb-3">لماذا أحبكِ بهذا القدر يا إسراء؟</h2>
+                <p class="text-sm text-rose-300/70 max-w-md mx-auto mb-8">اضغطي على برطمان الحب في أي وقت لتكتشفي رسالة عشق عشوائية من قلبي لكِ</p>
+
+                <!-- Interactive Jar Container -->
+                <div class="relative w-48 h-56 mx-auto mb-8 cursor-pointer group hover:scale-105 transition-transform" onclick="drawLoveNote()">
+                    <div class="w-28 h-6 bg-rose-700 rounded-t-lg mx-auto border-2 border-rose-600 shadow-sm"></div>
+                    <div class="w-44 h-48 bg-rose-900/30 backdrop-blur-md border-4 border-rose-700/80 rounded-b-3xl mx-auto relative overflow-hidden flex flex-wrap items-center justify-center p-4 gap-2 shadow-inner">
+                        <i data-lucide="heart" class="w-6 h-6 text-rose-500 fill-rose-500 animate-bounce"></i>
+                        <i data-lucide="heart" class="w-5 h-5 text-pink-400 fill-pink-400"></i>
+                        <i data-lucide="heart" class="w-7 h-7 text-rose-600 fill-rose-600"></i>
+                        <i data-lucide="heart" class="w-4 h-4 text-pink-500 fill-pink-500"></i>
+                        <i data-lucide="heart" class="w-6 h-6 text-rose-400 fill-rose-400"></i>
+                    </div>
+                </div>
+
+                <div id="noteDisplay" class="min-h-[100px] max-w-lg mx-auto p-6 bg-slate-900/90 border border-rose-800 rounded-2xl shadow-inner flex items-center justify-center transition-all">
+                    <p class="font-amiri text-xl text-rose-200 italic">"دوسي على البرطمان عشان تشوفي سبب من أسباب عشقي ليكي يا بطتي..."</p>
+                </div>
+
+                <div class="mt-6">
+                    <button onclick="drawLoveNote()" class="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold rounded-xl shadow-md hover:from-rose-600 hover:to-pink-700 transition-all flex items-center gap-2 mx-auto">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>اسحبي رقية عشق يا فلاحتي</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-12 border-t border-rose-950 text-center text-sm text-rose-300/60">
+            <p class="font-aref text-2xl text-rose-400 mb-2">أنتِ حبيبتي وملاكي وحوريتي للأبد يا إسراء ❤️</p>
+            <p>© <span id="currentYear"></span> صُنع بكل شَغَف وحُب خالص لكِ وحدكِ.</p>
+            <p>لولتك😘😁❤😁💍.</p>
+        </footer>
+
+    </div>
+
+    <!-- ==================== LOGIC & SCRIPT ==================== -->
+    <script>
+        lucide.createIcons();
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        /* ================= 1. PASSCODE & UNLOCK ================= */
+        const FIXED_PASSCODE = "3826"; 
+
+        function unlockSite(e) {
+            e.preventDefault();
+            const input = document.getElementById('passcodeInput').value.trim().toLowerCase();
+
+            if (input === FIXED_PASSCODE || input === "إسراء" || input === "اسراء") {
+                const lockScreen = document.getElementById('lockScreen');
+                const mainContent = document.getElementById('mainContent');
+                
+                lockScreen.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    mainContent.classList.remove('opacity-0');
+                    spawnHeartBurst();
+                }, 700);
+            } else {
+                const err = document.getElementById('unlockError');
+                err.classList.remove('hidden');
+                setTimeout(() => err.classList.add('hidden'), 3500);
+            }
+        }
+
+        function togglePasscodeVisibility() {
+            const input = document.getElementById('passcodeInput');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showHint() {
+            document.getElementById('hintText').classList.toggle('hidden');
+        }
+
+        /* ================= 2. UI TOGGLES ================= */
+        function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
+
+        /* ================= 3. AUDIO PLAYER ================= */
+        let isAudioPlaying = false;
+        function toggleAudio() {
+            const audio = document.getElementById('bgAudio');
+            const musicBtn = document.getElementById('musicBtn');
+            const musicPulse = document.getElementById('musicPulse');
+
+            if (!isAudioPlaying) {
+                audio.play().then(() => {
+                    isAudioPlaying = true;
+                    musicBtn.classList.add('bg-rose-500', 'text-white');
+                    musicPulse.classList.remove('hidden');
+                }).catch(err => {
+                    alert("اضغطي مرة أخرى لتشغيل الموسيقى");
+                });
+            } else {
+                audio.pause();
+                isAudioPlaying = false;
+                musicBtn.classList.remove('bg-rose-500', 'text-white');
+                musicPulse.classList.add('hidden');
+            }
+        }
+
+        /* ================= 4. COUNTER ================= */
+        const START_DATE = "2026-08-03T00:00:00"; // تاريخ التعارف
+
+        function updateTimer() {
+            const startDate = new Date(START_DATE);
+            const now = new Date();
+            const diff = now - startDate;
+            if (diff < 0) return;
+
+            document.getElementById('timerDays').textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('timerHours').textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            document.getElementById('timerMinutes').textContent = Math.floor((diff / 1000 / 60) % 60);
+            document.getElementById('timerSeconds').textContent = Math.floor((diff / 1000) % 60);
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        /* ================= 5. LIGHTBOX ================= */
+        function openLightbox(url, caption) {
+            document.getElementById('lightboxImg').src = url;
+            document.getElementById('lightboxCaption').textContent = caption;
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+        function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
+
+        /* ================= 6. LOVE JAR REASONS ================= */
+        const loveReasons = [
+            "لأنكِ النور الوحيد في وسط ضلمة الدنيا يا إسراء.",
+            "لأنكِ الوحيدة الحنونة في وسط قسوة هذا العالم.",
+            "لأنكِ السند الحقيقي لي في وسط كسرة الدنيا.",
+            "عشان كل ما احضنك بخاف اخسرك يا احن حد عليا.",
+            "لأنكِ مراتي وبنتي وأمي وأختي وصحبتي وكل ما أملك.",
+            "لأن عينيكِ ورقتكِ ويدكِ الكيوت هي كل ما أحتاجه في هذه الحياة.",
+            "لأنكِ الحور العين لي ونور القمر ودفء الشمس وحياة النيل.",
+            "لأنكِ الوردة الوحيدة المفتحة في وسط عالم مقفل ومضلم."
+        ];
+
+        function drawLoveNote() {
+            const display = document.getElementById('noteDisplay');
+            const randomReason = loveReasons[Math.floor(Math.random() * loveReasons.length)];
+            display.style.opacity = '0';
+            setTimeout(() => {
+                display.innerHTML = `<p class="font-amiri text-xl text-rose-200 font-bold transition-all">"${randomReason}"</p>`;
+                display.style.opacity = '1';
+                spawnHeartBurst();
+            }, 200);
+        }
+
+        /* ================= 7. CANVASES & PARTICLES ================= */
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class HeartParticle {
+            constructor(x, y, isBurst = false) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || canvas.height + 20;
+                this.size = Math.random() * 12 + 8;
+                this.speedY = isBurst ? (Math.random() - 0.5) * 6 : -Math.random() * 1.5 - 0.5;
+                this.speedX = isBurst ? (Math.random() - 0.5) * 6 : Math.sin(Math.random() * Math.PI) * 0.8;
+                this.opacity = Math.random() * 0.6 + 0.3;
+                this.color = `hsla(${Math.random() * 20 + 340}, 85%, 65%, ${this.opacity})`;
+                this.rotation = Math.random() * Math.PI;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < -20) {
+                    this.y = canvas.height + 20;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                const topCurveHeight = this.size * 0.3;
+                ctx.moveTo(0, topCurveHeight);
+                ctx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, topCurveHeight);
+                ctx.bezierCurveTo(-this.size / 2, (this.size + topCurveHeight) / 2, 0, this.size, 0, this.size);
+                ctx.bezierCurveTo(0, this.size, this.size / 2, (this.size + topCurveHeight) / 2, this.size / 2, topCurveHeight);
+                ctx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, topCurveHeight);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 25; i++) particles.push(new HeartParticle());
+
+        function spawnHeartBurst() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            for (let i = 0; i < 20; i++) particles.push(new HeartParticle(centerX, centerY, true));
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, idx) => {
+                p.update();
+                p.draw();
+                if (p.opacity <= 0) particles.splice(idx, 1);
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function() { animateParticles(); };
+    </script>
+</body>
+</html>
